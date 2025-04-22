@@ -13,12 +13,8 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,11 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
+import coil.compose.AsyncImage
 import com.noor.compose.R
 import com.noor.compose.ui.brochure.intent.BrochureIntent
 import com.noor.compose.ui.brochure.model.BrochureItem
@@ -84,30 +79,26 @@ fun BrochureCard(item: BrochureItem) {
         elevation = CardDefaults.cardElevation(),
     ) {
         Column() {
-            SubcomposeAsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(item.brochureImage)
-                    .crossfade(true)
-                    .placeholder(R.drawable.ic_error_outline)
-                    .build(),
-                contentDescription = null,
-                loading = {
-                    //handle loading if required
-                },
-                error = {
-                    //handle error if required
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
+            ImageRounded(url = item.brochureImage)
             Text(text = item.retailerName,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(8.dp))
         }
     }
+}
+
+@Composable
+fun ImageRounded(url: String?){
+    AsyncImage(
+        model = url,
+        placeholder = painterResource(id = R.drawable.ic_error_outline),
+        contentDescription = null,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        contentScale = ContentScale.Crop
+    )
 }
 
 @Preview(showBackground = true)
